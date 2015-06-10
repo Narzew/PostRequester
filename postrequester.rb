@@ -1,13 +1,14 @@
 #=======================================================================
 #**Post Requester
 #**Copyright 10.06.2015 Narzew
-#**v 1.3
+#**v 1.31
 #=======================================================================
 
 require 'net/http'
 require 'uri'
 require 'digest/md5'
 require 'digest/sha1'
+require 'zlib'
 
 module PostRequester
 
@@ -17,7 +18,7 @@ module PostRequester
 	def self.show_help
 		print "Usage: postrequester.rb URL field=value field=value @flag=value\n"
 		print "Available flags:\n"
-		print "sc=pattern - Split center - remove all before first and after second pattern\n"
+		print "@#sc=pattern - Split center - remove all before first and after second pattern\n"
 		print "sr=pattern - Split right - remove all before pattern\n"
 		print "sl=pattern - Split left - remove all after pattern\n"
 		print "port=nr - Change port number\n"
@@ -36,6 +37,8 @@ module PostRequester
 		print "uuefile=field=value - Replace value with UUEncode encoded file data\n"
 		print "db64file=field=value - Replace value with Base64 decoded file data\n"
 		print "duuefile=field=value - Replace value with UUEncode decoded file data\n"
+		print "zlibfile=field=value - Replace value with Zlib encoded file data\n"
+		print "dzlibfile=field=value - Replace value with Zlib decoded file data\n"
 	end
 	
 	def self.print_error(x)
@@ -95,43 +98,55 @@ module PostRequester
 						if File.exist?(data.at(2))
 							fields[data.at(1)] = File.read(data.at(2))
 						else
-							print_error("File #{data.at(2)} don't exist@")
+							print_error("File #{data.at(2)} don't exist!")
 						end
 					elsif data.at(0) == "@sha1file"
 						if File.exist?(data.at(2))
 							fields[data.at(1)] = Digest::SHA1.hexdigest(File.read(data.at(2)))
 						else
-							print_error("File #{data.at(2)} don't exist@")
+							print_error("File #{data.at(2)} don't exist!")
 						end
 					elsif data.at(0) == "@md5file"
 						if File.exist?(data.at(2))
 							fields[data.at(1)] = Digest::MD5.hexdigest(File.read(data.at(2)))
 						else
-							print_error("File #{data.at(2)} don't exist@")
+							print_error("File #{data.at(2)} don't exist!")
 						end
 					elsif data.at(0) == "@b64file"
 						if File.exist?(data.at(2))
 							fields[data.at(1)] = [File.read(data.at(2))].pack('m0').to_s
 						else
-							print_error("File #{data.at(2)} don't exist@")
+							print_error("File #{data.at(2)} don't exist!")
 						end
 					elsif data.at(0) == "@uuefile"
 						if File.exist?(data.at(2))
 							fields[data.at(1)] = [File.read(data.at(2))].pack('u').to_s
 						else
-							print_error("File #{data.at(2)} don't exist@")
+							print_error("File #{data.at(2)} don't exist!")
 						end
 					elsif data.at(0) == "@db64file"
 						if File.exist?(data.at(2))
 							fields[data.at(1)] = File.read(data.at(2)).unpack('m0').first
 						else
-							print_error("File #{data.at(2)} don't exist@")
+							print_error("File #{data.at(2)} don't exist!")
 						end
 					elsif data.at(0) == "@duuefile"
 						if File.exist?(data.at(2))
 							fields[data.at(1)] = File.read(data.at(2)).unpack('u').first
 						else
-							print_error("File #{data.at(2)} don't exist@")
+							print_error("File #{data.at(2)} don't exist!")
+						end
+					elsif data.at(0) == "@zlibfile"
+						if File.exist?(data.at(2))
+							fields[data.at(1)] = Zlib::Deflate.deflate(data.at(2),Zlib::BEST_COMPRESSION)
+						else
+							print_error("File #{data.at(2)} don't exist!")
+						end
+					elsif data.at(0) == "@dzlibfile"
+						if File.exist?(data.at(2))
+							fields[data.at(1)] = Zlib::Inflate.inflate(data.at(2))
+						else
+							print_error("File #{data.at(2)} don't exist!")
 						end
 					else
 						#Normal flag treatment
