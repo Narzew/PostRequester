@@ -1,11 +1,13 @@
 #=======================================================================
 #**Post Requester
 #**Copyright 10.06.2015 Narzew
-#**v 1.1
+#**v 1.2
 #=======================================================================
 
 require 'net/http'
 require 'uri'
+require 'digest/md5'
+require 'digest/sha1'
 
 module PostRequester
 
@@ -21,6 +23,8 @@ module PostRequester
 		print "port=nr - Change port number\n"
 		print "nolog=1 - Do not log requests\n"
 		print "log=file - Change logfile to file\n"
+		print "sha1=field=value - Hash value with SHA1\n"
+		print "md5=field=value - Hash value with MD5\n"
 	end
 	
 	def self.print_error(x)
@@ -61,8 +65,23 @@ module PostRequester
 			if x.include?("=")
 				data = x.split("=")
 				if data.at(0)[0] == "!"
-					 # Field is flag
-					flags[data.at(0).gsub("!","")] = data.at(1)
+					# Field is flag
+			
+					# Special flag treatmnet
+					if data.at(0) == "!sha1"
+						fields[data.at(1)] = Digest::SHA1.hexdigest(data.at(2))
+					elsif data.at(0) == "!md5"
+						fields[data.at(1)] = Digest::MD5.hexdigest(data.at(2))
+					elsif data.at(0) == "!file"
+						if File.exist?(data.at(2))
+							fields[data.at(1)] = File.read(data.at(2))
+						else
+							print_error("File #{data.at(2)} don't exist!")
+						end
+					else
+						#Normal flag treatment
+						flags[data.at(0).gsub("!","")] = data.at(1)
+					end
 				else
 					# Field is key=value field
 					fields[data.at(0)] = data.at(1)
