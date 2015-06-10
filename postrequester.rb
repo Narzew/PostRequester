@@ -1,7 +1,7 @@
 #=======================================================================
 #**Post Requester
 #**Copyright 10.06.2015 Narzew
-#**v 1.31
+#**v 1.32
 #=======================================================================
 
 require 'net/http'
@@ -18,27 +18,27 @@ module PostRequester
 	def self.show_help
 		print "Usage: postrequester.rb URL field=value field=value @flag=value\n"
 		print "Available flags:\n"
-		print "@#sc=pattern - Split center - remove all before first and after second pattern\n"
-		print "sr=pattern - Split right - remove all before pattern\n"
-		print "sl=pattern - Split left - remove all after pattern\n"
-		print "port=nr - Change port number\n"
-		print "nolog=1 - Do not log requests\n"
-		print "log=file - Change logfile to file\n"
-		print "sha1=field=value - Hash value with SHA1\n"
-		print "md5=field=value - Hash value with MD5\n"
-		print "b64=field=value - Encode value with Base64\n"
-		print "uue=field=value - Encode value with UUEncode\n"
-		print "db64=field=value - Decode value with Base64\n"
-		print "duue=field=value - Decode value with UUEncode\n"
-		print "file=field=value - Replace value with file data\n"
-		print "sha1file=field=value - Replace value with SHA1 file hash\n"
-		print "md5file=field=value - Replace value with MD5 file hash\n"
-		print "b64file=field=value - Replace value with Base64 encoded file data\n"
-		print "uuefile=field=value - Replace value with UUEncode encoded file data\n"
-		print "db64file=field=value - Replace value with Base64 decoded file data\n"
-		print "duuefile=field=value - Replace value with UUEncode decoded file data\n"
-		print "zlibfile=field=value - Replace value with Zlib encoded file data\n"
-		print "dzlibfile=field=value - Replace value with Zlib decoded file data\n"
+		print "@sc=pattern - Split center - remove all before first and after second pattern\n"
+		print "@sr=pattern - Split right - remove all before pattern\n"
+		print "@sl=pattern - Split left - remove all after pattern\n"
+		print "@port=nr - Change port number\n"
+		print "@nolog=1 - Do not log requests\n"
+		print "@log=file - Change logfile to file\n"
+		print "@sha1=field=value - Hash value with SHA1\n"
+		print "@md5=field=value - Hash value with MD5\n"
+		print "@b64=field=value - Encode value with Base64\n"
+		print "@uue=field=value - Encode value with UUEncode\n"
+		print "@db64=field=value - Decode value with Base64\n"
+		print "@duue=field=value - Decode value with UUEncode\n"
+		print "@file=field=value - Replace value with file data\n"
+		print "@sha1file=field=value - Replace value with SHA1 file hash\n"
+		print "@md5file=field=value - Replace value with MD5 file hash\n"
+		print "@b64file=field=value - Replace value with Base64 encoded file data\n"
+		print "@uuefile=field=value - Replace value with UUEncode encoded file data\n"
+		print "@db64file=field=value - Replace value with Base64 decoded file data\n"
+		print "@duuefile=field=value - Replace value with UUEncode decoded file data\n"
+		print "@zlibfile=field=value - Replace value with Zlib encoded file data\n"
+		print "@dzlibfile=field=value - Replace value with Zlib decoded file data\n"
 	end
 	
 	def self.print_error(x)
